@@ -17,6 +17,7 @@
          name="name"
          placeholder="Digite o Titúlo do Anúncio" 
          value="{{ product.name }}"
+         
          >
     </div>
 </div>
@@ -25,13 +26,31 @@
     <div>Descrição</div>
     <div>
         {# colocar um campo de texto maior #}
-        <textarea name="description">
-            {{product.description}}
-        </textarea>
+        <textarea name="description">{{product.description}}</textarea>
     </div>
 </div>
 
 {# campo de foto #}
+
+<div class="item">
+    <div>Fotos</div>
+    <div>
+        <div id="photos-upload">
+                <input 
+                id="photos-input"
+                type="file" 
+                name="photos" 
+                multiple
+                accept="image/*"
+                onchange="PhotosUpload.handleFileInput(event)"
+            >
+            <p>Selecione até 6 Fotos</p>
+            <br>
+            
+        </div>
+    <div id="photos-preview"></div>
+    {# accpt aceita só imagens #}
+</div>
 
 <div class="item">
     <div>Valor</div>
@@ -41,8 +60,9 @@
             name="price"
             placeholder="Preço do Produto"
             value="{{ product.price }}"
+            onkeydown="Mask.apply(this, 'formatBRL')"
         >
-                    {# onkeydown="Mask.apply(this, 'formatBRL')" #}
+                    
     </div>
     {% if product.old_price %}
         <input type="hidden" name="old_price" value={{product.old_price}}>
@@ -62,7 +82,7 @@
     </div>
 </div>
 
-{% if products.status %}
+{% if (product.status == '1') or (product.status == '0') %}
 <div class="item">
     <div>Disponível</div>
     <div>
@@ -74,7 +94,7 @@
         <span><input 
         type="radio" 
         name="status" 
-        value="0" {% if product.status == 'F' %} checked="checked" {% endif %}>Não</span>
+        value="0" {% if product.status == '0' %} checked="checked" {% endif %}>Não</span>
     </div>
 </div>
 {% endif %}
