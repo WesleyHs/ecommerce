@@ -16,6 +16,8 @@ module.exports = {
         RETURNING id
         `
 
+        data.price = data.price.replace(/\D/g,"")
+
         const values = [
             data.category_id,
             data.user_id || 1,
@@ -68,5 +70,11 @@ module.exports = {
 
     delete(id){
         return db.query('DELETE FROM products WHERE id = $1', [id])
+    },
+    files(id){
+        //buscar arquivos do produto
+        return db.query(`
+        SELECT * FROM files WHERE product_id = $1
+        `, [id])
     }
 }

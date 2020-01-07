@@ -1,6 +1,8 @@
-const Category = require('../models/Category')
+const { formatPrice } = require('../../lib/utils')
 
+const Category = require('../models/Category')
 const Product = require('../models/Product')
+const File = require('../models/File')
 
 
 module.exports = { //exportar o modulo//
@@ -25,11 +27,23 @@ module.exports = { //exportar o modulo//
             }
         }
 
+        //armazenamento de imagens
+
+        if (req.files.length == 0)
+            return res.send('Por favor, envie ao menos uma imagem')
+
 
         let results = await Product.create(req.body)//esperar a promise dar certo pra continuar o codigo
         const productId = results.rows[0].id //rows é o array
 
-        return res.redirect(`products/${productId}`)
+        const filesPromise = req.files.map(file => File.create({ //array de promessa MAP retorna array
+            ...file,
+            product_id: productId
+        }))
+        
+        await Promise.all(filesPromise) //esperar a criacao desse arquivo
+        
+        return res.redirect(`products/${productId}/edit`)
         
 
 
@@ -43,11 +57,21 @@ module.exports = { //exportar o modulo//
 
         if (!product) return res.send("Product not found")
 
-        
+        //get categories
         results = await Category.all()
         const categories = results.rows
 
-        return res.render("products/edit.njk", { product, categories })
+        // get imagens
+        results = await Product.files(product.id)
+        let files = results.rows
+        files = files.map(file => ({
+            ...file,
+            src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}` //colocar caminho da imagem
+
+        }))
+
+
+        return res.render("products/edit.njk", { product, categories, files })
 
     },
 
@@ -55,15 +79,28 @@ module.exports = { //exportar o modulo//
         //se tudo esta preenchido
         const keys = Object.keys(req.body)
         for (key of keys) {
-            if (req.body[key] == "") {
+            if (req.body[key] == "" && key != "removed_files") { //se for pra remove
                 return res.send('Preencha todos os campos')
             }
         }
 
-        //manter o valor antigo
+        //remover arquivo
+        if (req.body.removed_files) {
+            //vai devolver como array e romever a ultima posição
+            const removedFiles = req.body.removed_files.split(",") 
+            const lastIndex = removedFiles.length - 1
+            removedFiles.splice(lastIndex, 1) //removeu ultima posição
+            
+            const removedFilesPromise = removedFiles.map(id => File.delete(id))
 
+            await Promise.all(removedFilesPromise) //vai chamar o File delete
+        }
+
+
+        req.body.price = req.body.price.replace(/\D/g, "")
+        //manter o valor antigo
         if (req.body.old_price != req.body.price){
-            const oldProduct = await product.find(req.body.id)
+            const oldProduct = await Product.find(req.body.id)
             req.body.old.price = oldProduct.rows[0].price
         }
 

@@ -4,7 +4,8 @@
     <link rel="stylesheet" href="/styles.css">
 
     <section class="container form">
-        <form method="post" action="/products">
+        <form method="post" action="/products" enctype="multipart/form-data" >
+        {# instalar o multer #}
 
             <div class="header">
                 <h3>Cadastrar Produto {{productId}}</h3>
