@@ -10,6 +10,8 @@ routes.get('/', function(req, res){ //pagina inicial
 
 //rotas pra adicionar produto
 routes.get('/products/create', ProductController.create)
+//show
+routes.get('/products/:id', ProductController.show)
 //rota para editar
 routes.get('/products/:id/edit', ProductController.edit)
 //rota para atualizar
