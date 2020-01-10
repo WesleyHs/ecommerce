@@ -5,11 +5,11 @@ module.exports = {
             const date = new Date(timestamp)
 
             //yyy  //UTC tempo universal
-            const year = date.getUTCFullYear()
+            const year = date.getFullYear()
             //month
-            const month = `0${date.getUTCMonth() + 1}` .slice(-2)
+            const month = `0${date.getMonth() + 1}` .slice(-2)
             //day
-            const day = `0${date.getUTCDate()}` .slice(-2)
+            const day = `0${date.getDate()}` .slice(-2)
             //hours
             const hour = date.getHours()
             const minutes  = date.getMinutes()
