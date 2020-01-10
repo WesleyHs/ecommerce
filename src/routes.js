@@ -2,11 +2,14 @@ const express = require('express')
 const routes =  express.Router()
 const multer = require('./app/middlewars/multer') //multer
 const ProductController = require('./app/controllers/ProductController')
+const HomeController = require('./app/controllers/HomeController')
 
 
-routes.get('/', function(req, res){ //pagina inicial 
-    return res.render("layout.njk") //redirecionar
-})
+routes.get('/', HomeController.index)
+
+// routes.get('/', function(req, res){ //pagina inicial 
+//     return res.render("home/index.njk") //redirecionar
+// })
 
 //rotas pra adicionar produto
 routes.get('/products/create', ProductController.create)
