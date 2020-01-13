@@ -137,7 +137,7 @@ module.exports = { //exportar o modulo//
         //manter o valor antigo
         if (req.body.old_price != req.body.price){
             const oldProduct = await Product.find(req.body.id)
-            req.body.old.price = oldProduct.rows[0].price
+            req.body.old_price = oldProduct.rows[0].price
         }
 
         await Product.update(req.body)
