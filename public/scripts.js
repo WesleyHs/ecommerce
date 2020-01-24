@@ -89,6 +89,7 @@ const PhotosUpload = {
 
     getContainer(image) {
         const div = document.createElement('div')
+        
         div.classList.add('photo')
 
         div.onclick =  PhotosUpload.removePhoto
