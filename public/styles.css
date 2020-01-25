@@ -639,3 +639,10 @@ form .item #photos-preview img {
 .form input[name="cep"] {
     max-width: 60%;
 }
+
+/* validate errror  */
+
+.input .error {
+    color: red;
+    margin-top: 10px;
+}
