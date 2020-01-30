@@ -220,10 +220,10 @@ const Validate = {
         input.focus() //nao deixa sair do campo sem o formulario
     },
 
-    clearErrors(input){
+    clearErrors(input) {
         const errorDiv = input.parentNode.querySelector(".error")
 
-        if (errorDiv){
+        if (errorDiv) {
             errorDiv.remove()
         }
     },
@@ -239,5 +239,43 @@ const Validate = {
             error,
             value
         }
+    },
+
+    isCpfCnpj(value) {
+        let error = null
+
+        const cleanValues = value.replace(/\D/g, "")
+
+        if (cleanValues.length > 11 && cleanValues.length !== 14) {
+            error = "CNPJ incorreta"
+        }
+        else if (cleanValues.length < 12 && cleanValues.length !== 11) {
+            error = "CPF incorreto"
+        }
+
+
+        return {
+            error,
+            value
+        }
+    },
+
+        isCep(value) {
+
+        let error = null
+
+        const cleanValues = value.replace(/\D/g, "")
+
+        if (cleanValues.length !== 8) {
+            error = "CEP inválido"
+        }
+
+        return {
+            error,
+            value
+        }
+
     }
+
 }
+
