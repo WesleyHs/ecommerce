@@ -6,7 +6,10 @@ const User = require('../models/User')
     const keys = Object.keys(req.body)
     for (key of keys) {
         if (req.body[key] == "") {
-            return res.send('Preencha todos os campos')
+            return res.render('user/register', {
+                user: req.body,
+                error: 'Por favor preencha todos os campos'
+            })
         }
     }
 
@@ -21,12 +24,16 @@ const User = require('../models/User')
         or: { cpf_cnpj }
     })
 
-    if (user) return res.send('Usuário existente')
+    if (user) return res.render('user/register', {
+        user: req.body,
+        error: 'Usuario existente'
+    })
 
 
-    if (password != passwordRepeat)
-
-        return res.send('Passwor mismatch')
+    if (password != passwordRepeat) return res.render('user/register', {
+        user: req.body,
+        error: 'Confirmação de senha incorreta'
+    })
 
     next()
 

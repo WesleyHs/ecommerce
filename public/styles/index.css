@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap');
 
 /* geral global*/
 *{
@@ -265,7 +264,7 @@ form .item span{
     font-weight: bold;
     text-transform: uppercase;
     font-size: 12px;
-}
+} 
 
 
 /*FOTO UPLOAD*/
