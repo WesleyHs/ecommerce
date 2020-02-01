@@ -2,9 +2,12 @@ const express = require('express') //chama a dependencia express, pra dentro da 
 const nunjucks = require('nunjucks')
 const routes = require("./routes") //chamar as rotas
 const methodOverride = require('method-override')
+const session = require('./config/session') // session do usuario
+
 
 const server = express() //o servidor vai executar o express
 
+server.use(session)
 server.use(express.urlencoded({ extended: true})) //faz funcionat o req.body
 server.use(express.static('public')) //pegar o que tem exemplo css da pasta public
 server.use(methodOverride('_method')) //sobre escrever o methor POST p/ PUT
