@@ -33,6 +33,8 @@ async function forgot(req, res, next){
             error: "email não encontrado!"
         })
 
+        req.user = user
+
         next()
 
     }catch (err){
