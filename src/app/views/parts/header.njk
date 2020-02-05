@@ -26,31 +26,32 @@
                     </a>
 
                     {% if user %}
-                        <ul class="submenu">
-                            <li>
-                                <a href="/users">
-                                    Configurações
-                                </a>
+                        {%if session.userId %}
+                            <ul class="submenu">
+                                <li>
+                                    <a href="/users">Configurações</a>
+                                    <a href="/users">Minha conta</a>
+                                </li>
+                                <li>
+                                    <a href="/buying">
+                                        Meuspedidos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/selling">
+                                        Minhas vendas
+                                    </a>
+                                <li>
+                                    <form action="/users/logout" method="post">
+                                        <button>Sair</button>
+                                    </form>
+                                </li>
                             </li>
-                            <li>
-                                <a href="/buying">
-                                    Meuspedidos
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/selling">
-                                    Minhas vendas
-                                </a>
-                            <li>
-                                <form action="/users/logout" method="post">
-                                    <button>Sair</button>
-                                </form>
-                            </li>
-                        </li>
-                        <ul></li>
-                    </ul>
-                {% endif %}
+                            <ul></li>
+                        </ul>
+                        {% endif %}
+                    {% endif %}
 
-            </nav>
-        </div>
-    </header>
+                </nav>
+            </div>
+        </header>

@@ -76,3 +76,8 @@ CREATE TABLE "session"(
 
 WITH (OIDS=FALSE);
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid")
+
+
+--token passaeord recovery recuperação de senah
+ALTER TABLE "users" ADD COLUMN reset_token text;
+ALTER TABLE "users" ADD COLUMN reset_token_expires text;

@@ -8,6 +8,10 @@ const session = require('./config/session') // session do usuario
 const server = express() //o servidor vai executar o express
 
 server.use(session)
+server.use((req, res, next) => {
+    res.locals.session = req.session
+    next()
+})
 server.use(express.urlencoded({ extended: true})) //faz funcionat o req.body
 server.use(express.static('public')) //pegar o que tem exemplo css da pasta public
 server.use(methodOverride('_method')) //sobre escrever o methor POST p/ PUT
