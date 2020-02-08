@@ -33,6 +33,7 @@ module.exports = { //exportar o modulo//
             return res.send('Por favor, envie ao menos uma imagem')
 
 
+        req.body.user_id = req.session.userId
         let results = await Product.create(req.body)//esperar a promise dar certo pra continuar o codigo
         const productId = results.rows[0].id //rows é o array
 
