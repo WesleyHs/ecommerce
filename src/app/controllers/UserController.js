@@ -1,4 +1,10 @@
+const { hash } = require('bcryptjs')
+const { unlinkSync } = require('fs')
+
 const User = require('../models/User')
+const Product = require('../models/Product')
+
+
 const { formatCep, formatCpfCnpj } = require('../../lib/utils')
 
 module.exports = {
@@ -8,26 +14,54 @@ module.exports = {
     },
     async show(req, res) {
 
-        const { user } = req
+        try {
 
-        user.cpf_cnpj = formatCpfCnpj(user.cpf_cnpj)
-        user.cep = formatCep(user.cep)
+            const { user } = req
 
-        return res.render('user/index', { user })
+            user.cpf_cnpj = formatCpfCnpj(user.cpf_cnpj)
+            user.cep = formatCep(user.cep)
+
+            return res.render('user/index', { user })
+
+        } catch (error) {
+            console.error(error);
+        }
+
     },
     async post(req, res) {
 
-        const userId = await User.create(req.body)
+        try {
+            let { name, email, password, cpf_cnpj, cep, address } = req.body
 
-        req.session.userId = userId
+            password = await hash(password, 8)
+            cpf_cnpj = cpf_cnpj.replace(/\D/g, "")
+            cep = cep.replace(/\D/g, "")
 
-        return res.redirect('/users')
+
+
+            const userId = await User.create({
+                name,
+                email,
+                password,
+                cpf_cnpj,
+                cep,
+                address
+            })
+
+            req.session.userId = userId
+
+            return res.redirect('/users')
+
+        } catch (error) {
+            console.error(error);
+
+        }
 
     },
     async update(req, res) {
         const { user } = req
-        
-        try{
+
+        try {
             let { name, email, cpf_cnpj, cep, address } = req.body
             cpf_cnpj = cpf_cnpj.replace(/\D/g, "")
             cep = cep.replace(/\D/g, "")
@@ -46,29 +80,55 @@ module.exports = {
             })
 
 
-        }catch(err){
+        } catch (err) {
             console.error(err);
-            return res.render("user/index",{
+            return res.render("user/index", {
                 error: "Algum erro aconteceu"
             })
         }
     },
-    async delete(req,res) {
+    async delete(req, res) {
+
         try {
-            await User.delete(req.body.id)
-            req.session.destroy()
 
-            return res.render("session/login",{
-                success:"conta deletada com sucesso!"
+
+            //pegar todos os produtodos
+            const products = await Product.findAll({ where: { user_id: req.body.id } })
+
+            // dos produtos,pegar todas as imagens
+            const allFilesPromise = products.map(product =>
+                Product.files(product.id))
+
+            let promiseResults = await Promise.all(allFilesPromise)
+
+            //rodar a remocao do usuario
+                await User.delete(req.body.id)
+                req.session.destroy()
+
+            //remover as imagens da pasta public
+            promiseResults.map(results => {
+                results.rows.map(file => {
+                    try {
+                        unlinkSync(file.path)
+                    } catch (err) {
+                        console.error(err)
+                    }
+                })
             })
-            
 
-        }catch(err) {
-            console.error(err)  
-            return res.render("user/index",{
+            return res.render("session/login", {
+                success: "Conta deletada com sucesso!"
+            })
+
+        } catch (error) {
+            console.error(err)
+            return res.render("user/index", {
                 user: req.body,
-                error:"erro ao tentar deletar sua conta!"
+                error: "Erro ao tentar deletar sua conta!"
             })
+
         }
+
+
     }
 }
