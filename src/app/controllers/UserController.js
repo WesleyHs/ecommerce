@@ -59,9 +59,10 @@ module.exports = {
 
     },
     async update(req, res) {
-        const { user } = req
 
         try {
+            const { user } = req
+
             let { name, email, cpf_cnpj, cep, address } = req.body
             cpf_cnpj = cpf_cnpj.replace(/\D/g, "")
             cep = cep.replace(/\D/g, "")
@@ -73,6 +74,7 @@ module.exports = {
                 cep,
                 address
             })
+            console.log('passei')
 
             return res.render("user/index", {
                 user: req.body,

@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS launchstoredb;
+CREATE DATABASE launchstoredb;
+
 CREATE TABLE "products" (
   "id" SERIAL PRIMARY KEY,
   "category_id" int NOT NULL,
@@ -43,7 +46,7 @@ CREATE TABLE "users" (
 
 -- foreign
 
-ALTER TABLE "produts" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "products" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 CREATE FUNCTION trigger_set_timestamp()
 RETURNS TRIGGER AS $$
@@ -68,14 +71,13 @@ INSERT INTO categories(name) VALUES ('automoveis');
 
 --connect pg simple table
 
-CREATE TABLE "session"(
+CREATE TABLE "session" (
   "sid" varchar NOT NULL COLLATE "default",
-  "sess" json  NOT NULL,
-  "expire" timestamp(6) NOT NULL
+	"sess" json NOT NULL,
+	"expire" timestamp(6) NOT NULL
 )
-
 WITH (OIDS=FALSE);
-ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid")
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 
 --token passaeord recovery recuperação de senah
@@ -96,3 +98,17 @@ ADD CONSTRAINT products_product_id_fkey
 FOREIGN KEY ("product_id")
 REFERENCES "products"("id")
 ON DELETE CASCADE;
+
+
+
+
+delete from products;
+delete from users;
+delete from files;
+
+--restart sequence auto_incremente from tables ids
+
+
+alter sequence products_id_seq restart with 1;
+alter sequence users_id_seq restart with 1;
+alter sequence files_id_seq restart with 1;

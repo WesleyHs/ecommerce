@@ -56,7 +56,7 @@ const Base = {
                 //name, age, address
 
                 keys.push(key)
-                values.push(fields[key])
+                values.push(`'${fields[key]}'`)
 
             })
 
@@ -73,27 +73,24 @@ const Base = {
         }
 
     },
+
     update(id, fields) {
-
         try {
-
             let update = []
 
             Object.keys(fields).map(key => {
-
-                const line = `'${key} = '${fields[key]}'`
+                // category_id=($1)
+                const line = `${key} = '${fields[key]}'`
                 update.push(line)
-
             })
 
             let query = `UPDATE ${this.table} SET
-            ${update.join(',')} WHERE id = ${id}   
-            `
-            return db.query(query)
+                ${update.join(',')} WHERE id = ${id}
+                `
 
+            return db.query(query)
         } catch (error) {
             console.error(error);
-
         }
     },
     delete(id) {

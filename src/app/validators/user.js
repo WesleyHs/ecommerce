@@ -73,7 +73,7 @@ async function update(req, res, next) {
     //verificar se tem senha
 
     const { id, password } = req.body
-    if(!password) return res.render("user/index", {
+    if (!password) return res.render("user/index", {
         user: req.body,
         error: "Coloque sua senha para atualizar seu cadastro."
     })

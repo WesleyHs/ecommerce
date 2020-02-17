@@ -27,12 +27,12 @@ const Mask = {
 
         } else {
 
-        }
+        
         // mascara cpf
         value = value.replace(/(\d{3})(\d)/, "$1.$2")
         value = value.replace(/(\d{3})(\d)/, "$1.$2")
         value = value.replace(/(\d{3})(\d)/, "$1-$2")
-
+        }
         return value
     },
     cep(value) {
