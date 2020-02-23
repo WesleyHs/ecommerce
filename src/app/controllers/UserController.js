@@ -109,7 +109,7 @@ module.exports = {
 
             //remover as imagens da pasta public
             promiseResults.map(results => {
-                results.rows.map(file => {
+                files.map(file => {
                     try {
                         unlinkSync(file.path)
                     } catch (err) {
